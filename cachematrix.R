@@ -1,39 +1,31 @@
 ## This code was created as part of programming assignment 2 in Coursera's "R Programming" course.
 ## Original code template was sourced from https://github.com/rdpeng/ProgrammingAssignment2
 
-## The makeCacheMatrix function creates a matrix whose inverse will be solved then cached using cacheSolve.
+## makeCacheMatrix creates a matrix whose inverse will be solved then cached using cacheSolve.
+    ## 4 functions (set, get, setinv, getinv) are defined in makeCacheMatrix.
 
 makeCacheMatrix <- function(x = matrix()) {
-  ## This sets the initial inverse of the matrix (inv) to NULL, and creates a function called "set"
-  ## which can be used to change the value of the matrix without having to reinput makeCacheMatrix entirely.
-  ## The "get" function can be used to see the current value of the matrix.
   inv <- NULL
   set <- function(y) {
     x <<- y
     inv <<- NULL
   }
   get <- function() x
-  ## Here, "setinv" is defined, and will be used by cachesolve to record the value of the matrix inverse.
-  ## "getinv" can be used to see the value of the matrix inverse that is currently stored.
   setinv <- function(solve) inv <<- solve
   getinv <- function() inv 
   list(set=set, get=get, setinv=setinv, getinv=getinv)
 }
 
-## cacheSolve checks to see if the inverse of the matrix created by makeCacheMatrix is cached.
-## If inv == NULL, then the function solves the matrix and caches its inverse for future use.
+## cacheSolve checks if the inverse of the previous matrix is cached.
+## If inv == NULL, then cacheSolve solves the matrix and caches its inverse.
+## If inv != NULL, then cacheSolve returns the stored matrix inverse.
 
 cacheSolve <- function(x, ...) {
-  ## "inv" is set to the current stored value for the matrix inverse.
   inv <- x$getinv()
-  ## If "inv" is not NULL, then the stored value for "inv" is returned, forgoing the solve calculation.
   if(!is.null(inv)) {
     message("getting cached data")
     return(inv)
   }
-  ## If inv == NULL, then "data" is defined as the current value of "x".
-  ## Then "inv" is defined as the result of solving the matrix in "data".
-  ## The new solution is then set as "inv" in makeCacheMatrix, and returned to the console.
   data <- x$get()
   inv <- solve(data, ...)
   x$setinv(inv)
